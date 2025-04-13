@@ -57,7 +57,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/price"
             android:text="Kosárba"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerHorizontal="true"
+            android:backgroundTint="@color/dark_green"/>
 
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

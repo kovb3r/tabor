@@ -32,36 +32,37 @@
         <item>Balatonakali tábor</item>
         <item>Zamardi tábor</item>
         <item>Siofok tábor</item>
-        <item>Balatonakali tábor</item>
-        <item>Balatonakali tábor</item>
+        <item>Erdélyi tábor</item>
+        <item>Biciklis tábor</item>
         <item>Vitorlás tábor</item>
         <item>Repülős tábor</item>
     </string-array>
 
     <string-array name="camp_desc">
-        <item>Ez egy okos telefon!</item>
-        <item>Ez egy tablet!</item>
-        <item>Ez egy gamer pc!</item>
-        <item>Ez egy OLED TV!</item>
-        <item>Ez egy kerékpár!</item>
-        <item>Ez egy lego!</item>
-        <item>Ez egy jelmez!</item>
-        <item>Ezek sport eszközök!</item>
-        <item>Ezek konyhai eszküzök!</item>
-        <item>Ez egy bútor!</item>
+        <item>Fedezd fel az Alpok havas csúcsait Ausztriában, és tanulj síelni profi oktatók segítségével!</item>
+        <item>Élvezd a szlovák hegyek téli varázsát egy izgalmas sítáborban, kezdőknek és haladóknak is!</item>
+        <item>Síelj a francia Alpok legendás pályáin, és tapasztald meg az igazi alpesi élményt!</item>
+        <item>Nyári tábor Balatonakaliban, tele strandolással, játékokkal és kirándulásokkal a Balaton partján.</item>
+        <item>Élménydús tábor Zamárdiban, ahol strandolás, sportversenyek és esti bulik várnak rád!</item>
+        <item>Szórakozás és pihenés Siófokon – napozás, vízparti programok és felejthetetlen élmények.</item>
+        <item>Fedezd fel Erdély varázslatos tájait kirándulásokkal, városnézéssel és helyi kulturális programokkal!</item>
+        <item>Vágj neki két keréken a kalandnak! Biciklitúrák, természetjárás és igazi csapatélmény vár rád.</item>
+        <item>Tanulj meg vitorlázni a Balatonon! Szél, hullámok és kaland egy felejthetetlen nyári táborban.</item>
+        <item>Emelkedj a magasba! Ismerkedj meg a repülés alapjaival és próbáld ki a szimulátorokat is!</item>
     </string-array>
 
+
     <array name="camp_rates">
-        <item>3.5</item>
+        <item>4</item>
         <item>5</item>
         <item>4</item>
-        <item>1.5</item>
-        <item>5</item>
         <item>3</item>
+        <item>5</item>
+        <item>2</item>
         <item>4.5</item>
         <item>4</item>
         <item>5</item>
-        <item>2.5</item>
+        <item>3.5</item>
     </array>
 
     <array name="camp_images">
@@ -71,24 +72,24 @@
         <item>@drawable/akali</item>
         <item>@drawable/zamardi</item>
         <item>@drawable/siofok</item>
-        <item>@drawable/akali</item>
-        <item>@drawable/akali</item>
+        <item>@drawable/erdely</item>
+        <item>@drawable/bicikli</item>
         <item>@drawable/vitorlas</item>
         <item>@drawable/repulo</item>
 
     </array>
 
     <array name="camp_price">
-        <item>100 Dv</item>
-        <item>150 Dv</item>
-        <item>500 Dv</item>
-        <item>300 Dv</item>
-        <item>180 Dv</item>
-        <item>70 Dv</item>
-        <item>20 Dv</item>
-        <item>30 Dv</item>
-        <item>15 Dv</item>
-        <item>90 Dv</item>
+        <item>120000 Ft</item>
+        <item>95000 Ft</item>
+        <item>108000 Ft</item>
+        <item>42000 Ft</item>
+        <item>59900 Ft</item>
+        <item>75000 Ft</item>
+        <item>80000 Ft</item>
+        <item>38000 Ft</item>
+        <item>54000 Ft</item>
+        <item>30000 Ft</item>
     </array>
 
 </resources>
