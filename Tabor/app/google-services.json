@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "171382684524",
+    "project_id": "camp-a4a50",
+    "storage_bucket": "camp-a4a50.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:171382684524:android:e67b07e48eaa3b6bb91149",
+        "android_client_info": {
+          "package_name": "com.example.tabor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "171382684524-u8dijf8rtl68jtjnpcidg0s5vnc50f5e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tabor",
+            "certificate_hash": "55b1bbc49843dfbb51c75457b8f87467f3dc8b0b"
+          }
+        },
+        {
+          "client_id": "171382684524-217f68md6ka1m8j0nvnc26g1583ro1bo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkUnMEKkcHy7GbQmY9MKgoXs-HcbjBHjY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "171382684524-217f68md6ka1m8j0nvnc26g1583ro1bo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
