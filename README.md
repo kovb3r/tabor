@@ -1,0 +1,1 @@
+Nyári tabor foglaló alkalmazás
