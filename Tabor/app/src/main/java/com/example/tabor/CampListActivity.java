@@ -1,5 +1,9 @@
 package com.example.tabor;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,9 +13,11 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.MenuItemCompat;
 import androidx.core.view.ViewCompat;
@@ -19,8 +25,15 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -41,6 +54,10 @@ public class CampListActivity extends AppCompatActivity {
 
     private int gridNumber = 1;
     private int cartItems = 0;
+    private int queryLimit = 10;
+
+    private FirebaseFirestore mFirestore;
+    private CollectionReference mCamps;
     private boolean viewRow = true;
 
     @Override
@@ -48,6 +65,10 @@ public class CampListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_camp_list);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.recyclerView), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -63,15 +84,81 @@ public class CampListActivity extends AppCompatActivity {
             finish();
         }
 
+
+
         mRecyclerView = findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, gridNumber));
         mCampList = new ArrayList<>();
         mAdapter = new CampAdapter(this, mCampList);
         mRecyclerView.setAdapter(mAdapter);
 
-        initializeData();
+        mFirestore = FirebaseFirestore.getInstance();
+        mCamps = mFirestore.collection("Camps");
+
+        queryData();
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_POWER_CONNECTED);
+        filter.addAction(Intent.ACTION_POWER_DISCONNECTED);
+        this.registerReceiver(powerReciever, filter);
+    }
+
+    BroadcastReceiver powerReciever = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+
+            if(action == null)
+                return;
+
+            switch (action){
+                case Intent.ACTION_POWER_CONNECTED:
+                    queryLimit = 10;
+                    queryData();
+                    break;
+                case Intent.ACTION_POWER_DISCONNECTED:
+                    queryLimit = 5;
+                    queryData();
+                    break;
+            }
+            queryData();
+        }
+    };
+
+    private void queryData() {
+        mCampList.clear();
+
+        //mCamps.whereEqualTo()...
+        mCamps.orderBy("count", Query.Direction.DESCENDING).limit(queryLimit).get().addOnSuccessListener(queryDocumentSnapshots -> {
+            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                Camp camp = document.toObject(Camp.class);
+                camp.setId(document.getId());
+                mCampList.add(camp);
+            }
+
+            if (mCampList.isEmpty()) {
+                initializeData();
+                queryData();
+            }
+            mAdapter.notifyDataSetChanged();
+        });
 
     }
+
+    public void deleteCamp(Camp camp) {
+        DocumentReference ref = mCamps.document(camp._getId());
+        ref.delete()
+                .addOnSuccessListener(success -> {
+                    Log.d(LOG_TAG, "Item is successfully deleted: " + camp._getId());
+                })
+                .addOnFailureListener(fail -> {
+                    Toast.makeText(this, "Item " + camp._getId() + " cannot be deleted.", Toast.LENGTH_LONG).show();
+                });
+
+        queryData();
+        //mNotificationHelper.cancel();
+    }
+
 
     private void initializeData() {
         String[] campList = getResources().getStringArray(R.array.camp_names);
@@ -80,16 +167,21 @@ public class CampListActivity extends AppCompatActivity {
 
         TypedArray campImageResources = getResources().obtainTypedArray(R.array.camp_images);
         TypedArray campRate = getResources().obtainTypedArray(R.array.camp_rates);
-        mCampList.clear();
+
 
         for (int i = 0; i < campList.length; i++) {
-            mCampList.add(new Camp(campDescription[i], campImageResources.getResourceId(i, 0), campList[i], campPrice[i], campRate.getFloat(i, 0)));
+            mCamps.add(new Camp(
+                    campDescription[i],
+                    campImageResources.getResourceId(i, 0),
+                    campList[i],
+                    campPrice[i],
+                    campRate.getFloat(i, 0),
+                    0
+                    ));
 
         }
 
         campImageResources.recycle();
-
-        mAdapter.notifyDataSetChanged();
 
     }
 
@@ -168,7 +260,7 @@ public class CampListActivity extends AppCompatActivity {
         return super.onPrepareOptionsMenu(menu);
     }
 
-    public void updateAlertIcon() {
+    public void updateAlertIcon(Camp camp) {
         cartItems = (cartItems + 1);
         if (0 < cartItems) {
             contentTextView.setText(String.valueOf(cartItems));
@@ -177,9 +269,17 @@ public class CampListActivity extends AppCompatActivity {
         }
 
         redCircle.setVisibility((cartItems > 0) ? VISIBLE : GONE);
+
+        mCamps.document(camp._getId()).update("count", camp.getCount() + 1)
+            .addOnFailureListener(fail -> {
+                Toast.makeText(this, "Item " + camp._getId() + " cannot be updated.", Toast.LENGTH_LONG).show();
+            });
+        queryData();
     }
 
-
-
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(powerReciever);
+    }
 }

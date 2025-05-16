@@ -109,15 +109,6 @@ public class CampAdapter extends RecyclerView.Adapter<CampAdapter.ViewHolder> im
             mCampImage = itemView.findViewById(R.id.itemImage);
             mRatingBar = itemView.findViewById(R.id.ratingBar);
 
-            itemView.findViewById(R.id.add_to_cart).setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-
-                    Log.d("Activity", "Add to cart button clicked!");
-                    ((CampListActivity) mContext).updateAlertIcon();
-                }
-            });
         }
 
         public void bindTo(Camp currentCamp) {
@@ -127,6 +118,13 @@ public class CampAdapter extends RecyclerView.Adapter<CampAdapter.ViewHolder> im
             mRatingBar.setRating(currentCamp.getRatedInfo());
 
             Glide.with(mContext).load(currentCamp.getImageUrl()).into(mCampImage);
+
+            itemView.findViewById(R.id.add_to_cart).setOnClickListener(v -> {
+                ((CampListActivity) mContext).updateAlertIcon(currentCamp);
+            });
+            itemView.findViewById(R.id.delete).setOnClickListener(v -> {
+                ((CampListActivity) mContext).deleteCamp(currentCamp);
+            });
         }
     }
 }
