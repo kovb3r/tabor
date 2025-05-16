@@ -1,7 +1,7 @@
 package com.example.tabor;
 
 import android.content.Context;
-import android.util.Log;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +15,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class CampAdapter extends RecyclerView.Adapter<CampAdapter.ViewHolder> implements Filterable {
     private Context mContext;
@@ -41,7 +42,7 @@ public class CampAdapter extends RecyclerView.Adapter<CampAdapter.ViewHolder> im
     @Override
     public void onBindViewHolder(CampAdapter.ViewHolder holder, int position) {
         Camp currentCamp = mCampsData.get(position);
-        
+
         holder.bindTo(currentCamp);
 
         if(holder.getAdapterPosition() > lastPosition){
@@ -109,7 +110,22 @@ public class CampAdapter extends RecyclerView.Adapter<CampAdapter.ViewHolder> im
             mCampImage = itemView.findViewById(R.id.itemImage);
             mRatingBar = itemView.findViewById(R.id.ratingBar);
 
+            itemView.setOnClickListener(view -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    Camp selectedCamp = mCampsData.get(position);
+                    Intent detailIntent = new Intent(mContext, CampDetailActivity.class);
+                    detailIntent.putExtra("name", selectedCamp.getName());
+                    detailIntent.putExtra("desc", selectedCamp.getDescription());
+                    detailIntent.putExtra("price", selectedCamp.getPrice());
+                    detailIntent.putExtra("image", selectedCamp.getImageUrl());
+                    detailIntent.putExtra("rating", selectedCamp.getRatedInfo());
+                    mContext.startActivity(detailIntent);
+                }
+            });
+
         }
+
 
         public void bindTo(Camp currentCamp) {
             mTitleText.setText(currentCamp.getName());
